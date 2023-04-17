@@ -11,7 +11,9 @@
     <bean id="questionService" class="ru.otus.spring.service.QuestionServiceImpl">
         <constructor-arg name="dao" ref="questionDao"/>
         <constructor-arg name="outputService" ref="outputService"/>
+        <constructor-arg name="questionConverter" ref="questionConverter"/>
     </bean>
     <bean id="outputService" class="ru.otus.spring.service.OutputServiceImpl"/>
+    <bean id="questionConverter" class="ru.otus.spring.service.QuestionConverterImpl"/>
 
 </beans>

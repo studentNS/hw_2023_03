@@ -1,5 +1,6 @@
 package ru.otus.spring.service;
 
+import com.opencsv.CSVReader;
 import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.Question;
 
@@ -12,14 +13,18 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final OutputService outputService;
 
-    public QuestionServiceImpl(QuestionDao dao, OutputService outputService) {
+    private final QuestionConverter questionConverter;
+
+    public QuestionServiceImpl(QuestionDao dao, OutputService outputService, QuestionConverter questionConverter) {
         this.dao = dao;
         this.outputService = outputService;
+        this.questionConverter = questionConverter;
     }
 
     @Override
     public List<Question> getQuestion() throws IOException {
-        return dao.findQuestion();
+        CSVReader reader = dao.findQuestion();
+        return questionConverter.getQuestionsFromCVSReader(reader);
     }
 
     @Override
