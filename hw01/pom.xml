@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.7.0</version>
+            <version>${opencsv.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
