@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.otus</groupId>
-    <artifactId>spring-01</artifactId>
+    <artifactId>spring-02</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -19,7 +19,6 @@
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <mockito.version>4.9.0</mockito.version>
         <assertj.version>3.23.1</assertj.version>
-        <opencsv.version>5.7.0</opencsv.version>
     </properties>
 
     <dependencies>
@@ -31,9 +30,8 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>${opencsv.version}</version>
+            <version>5.7.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
