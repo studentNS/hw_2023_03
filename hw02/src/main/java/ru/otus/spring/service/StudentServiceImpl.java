@@ -17,9 +17,9 @@ public class StudentServiceImpl implements StudentService {
         ioService.outputString("Firstname: ");
         String firstName = ioService.readString();
         ioService.outputString("Lastname: ");
-        String lastNname = ioService.readString();
+        String lastName = ioService.readString();
 
-        return new Student(firstName, lastNname);
+        return new Student(firstName, lastName);
     }
 
 }

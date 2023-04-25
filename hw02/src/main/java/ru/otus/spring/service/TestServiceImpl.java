@@ -46,7 +46,7 @@ public class TestServiceImpl implements TestService{
         boolean correctInputNumber = false;
 
         while(!correctInputNumber) {
-            ioService.outputString("Entry number answer 1-3: ");
+            ioService.outputString("Entry number answer 1-" + question.getAnswers().size());
             try {
                 int studentAnswer = ioService.readInt();
 
