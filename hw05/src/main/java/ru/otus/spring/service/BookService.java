@@ -8,11 +8,13 @@ public interface BookService {
 
     Book getBookById(long bookId);
 
-    long insert(Book book);
+    long insert(String bookName, long authorId,
+                long genreId);
 
     List<Book> findAllBooks();
 
-    void updateBook(Book book);
+    void updateBook(long bookId, String bookName,
+                    long authorId, long genreId);
 
     void deleteBookById(long bookId);
 }

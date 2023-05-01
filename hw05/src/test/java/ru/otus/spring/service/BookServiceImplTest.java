@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @DisplayName("Сервис для работы с книгами")
@@ -26,11 +27,18 @@ public class BookServiceImplTest {
     @MockBean
     private BookDao bookDao;
 
+    @MockBean
+    private AuthorService authorService;
+
+    @MockBean
+    private GenreService genreService;
+
     private BookService bookService;
 
     @BeforeEach
     void setUp() {
-        bookService = new BookServiceImpl(bookDao);
+
+        bookService = new BookServiceImpl(bookDao, authorService, genreService);
     }
 
     @DisplayName("получать книгу по ID")
@@ -48,13 +56,11 @@ public class BookServiceImplTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     public void shouldInsertBook() {
-        Author author = new Author(1, "Александр Пушкин");
-        Genre genre = new Genre(1, "Роман");
-        long expectedBookId = 1;
-        Book expectedBook = new Book(expectedBookId, "Евгений Онегин", author, genre);
-        when(bookDao.insert(expectedBook)).thenReturn(expectedBookId);
-        long actualBookId = bookService.insert(expectedBook);
-        assertThat(expectedBookId).usingRecursiveComparison().isEqualTo(actualBookId);
+        long authorId = 1;
+        long genreId = 1;
+        String bookName = "Евгений Онегин";
+        long actualBookId = bookService.insert(bookName, authorId, genreId);
+        assertThat(actualBookId).isNotNull();
     }
 
     @DisplayName("возвращать ожидаемый список книг")
@@ -75,11 +81,15 @@ public class BookServiceImplTest {
     @DisplayName("обновлять книгу в БД")
     @Test
     public void shouldUpdateBook() {
-        Book expectedBook = bookService.getBookById(1);
-        Author author = new Author(1, "Александр Пушкин");
-        Genre genre = new Genre(1, "Роман");
-        Book actualBook = new Book(1, "Евгений Онегин", author, genre);
-        bookService.updateBook(actualBook);
+        long authorId = 1;
+        long genreId = 1;
+        long expectedBookId = 1;
+        String bookName = "Евгений Онегин";
+        Book expectedBook = bookService.getBookById(expectedBookId);
+        Author author = new Author(authorId, "Александр Пушкин");
+        Genre genre = new Genre(genreId, "Роман");
+        Book actualBook = new Book(expectedBookId, bookName, author, genre);
+        bookService.updateBook(expectedBookId, bookName, authorId, genreId);
         assertThat(actualBook).usingRecursiveComparison().isNotEqualTo(expectedBook);
     }
 

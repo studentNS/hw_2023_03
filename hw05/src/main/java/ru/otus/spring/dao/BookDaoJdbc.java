@@ -28,12 +28,12 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public Book getBookById(long bookId) {
         Map<String, Object> params = Collections.singletonMap("id", bookId);
-        return namedParameterJdbcOperations.queryForObject(
-                "select b.id, b.name, b.author_id, a.name author_name, " +
-                        "b.genre_id, g.name genre_name " +
-                        "from (books b left join authors a on b.author_id = a.id)" +
-                        "left join genres g on g.id = b.genre_id " +
-                        "where b.id = :id", params, new BookMapper());
+        return namedParameterJdbcOperations.queryForObject("""
+                select b.id, b.name, b.author_id, a.name author_name,
+                b.genre_id, g.name genre_name
+                from (books b left join authors a on b.author_id = a.id)
+                left join genres g on g.id = b.genre_id
+                where b.id = :id""", params, new BookMapper());
     }
 
     @Override
@@ -51,11 +51,11 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> findAllBooks() {
-        return namedParameterJdbcOperations.query(
-                "select b.id, b.name, b.author_id, a.name author_name, " +
-                        "b.genre_id, g.name genre_name " +
-                        "from (books b left join authors a on b.author_id = a.id)" +
-                        "left join genres g on g.id = b.genre_id", new BookMapper());
+        return namedParameterJdbcOperations.query("""
+                select b.id, b.name, b.author_id, a.name author_name,
+                b.genre_id, g.name genre_name
+                from (books b left join authors a on b.author_id = a.id)
+                left join genres g on g.id = b.genre_id""", new BookMapper());
     }
 
     @Override
