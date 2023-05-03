@@ -2,7 +2,7 @@ package ru.otus.spring.domain;
 
 import java.util.List;
 
-public class Test {
+public class Testing {
 
     private Student student;
 
@@ -10,7 +10,7 @@ public class Test {
 
     private List<Question> questionsList;
 
-    public Test(Student student, List<Question> questions) {
+    public Testing(Student student, List<Question> questions) {
         this.student = student;
         this.questionsList = questions;
     }

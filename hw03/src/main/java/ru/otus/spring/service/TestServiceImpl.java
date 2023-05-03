@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.config.AppProps;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.domain.Student;
-import ru.otus.spring.domain.Test;
+import ru.otus.spring.domain.Testing;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,13 +38,13 @@ public class TestServiceImpl implements TestService{
         Student student = studentService.getStudentFromConsole();
         List<Question> questions = questionService.getQuestion();
         if(questions.size() > 0) {
-            Test test = new Test(student, questions);
+            Testing test = new Testing(student, questions);
             processingTest(test);
         }
       }
 
     @Override
-    public void processingTest(Test test) {
+    public void processingTest(Testing test) {
 
         int correctAnswersCount = 0;
         for (Question question: test.getQuestionsList()) {
@@ -81,7 +81,7 @@ public class TestServiceImpl implements TestService{
         return correctAnswersCount;
     }
 
-    private void results(Test test) {
+    private void results(Testing test) {
         ioService.outputString(localizeService.getMessage("results"));
         ioService.outputString(test.getStudent().getFirstName() + " " + test.getStudent().getLastName());
         if(test.getCorrectAnswersCount() > appProps.getMinCorrectAnswers()) {

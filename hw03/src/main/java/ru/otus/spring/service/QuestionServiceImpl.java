@@ -1,6 +1,5 @@
 package ru.otus.spring.service;
 
-import com.opencsv.CSVReader;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.Question;
@@ -25,8 +24,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> getQuestion() {
-        CSVReader reader = dao.findQuestion();
-        return questionConverter.getQuestionsFromCVSReader(reader);
+        List<String[]> data = dao.findQuestion();
+        return questionConverter.getQuestionsFromCVS(data);
     }
 
     @Override

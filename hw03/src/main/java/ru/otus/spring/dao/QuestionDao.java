@@ -1,9 +1,9 @@
 package ru.otus.spring.dao;
 
-import com.opencsv.CSVReader;
+import java.util.List;
 
 public interface QuestionDao{
 
-    CSVReader findQuestion();
+    List<String[]> findQuestion();
 
 }

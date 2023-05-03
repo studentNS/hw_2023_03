@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.config.AppProps;
 
+import java.util.List;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +32,7 @@ public class QuestionDaoTest {
         Locale l =new Locale("en");
         when(appProps.getLocale()).thenReturn(l);
         when(appProps.getCsvFileName()).thenReturn("questions");
-        CSVReader reader = questionDao.findQuestion();
-        assertThat(reader).isNotNull();
+        List<String[]> data = questionDao.findQuestion();
+        assertThat(data).isNotNull();
     }
 }

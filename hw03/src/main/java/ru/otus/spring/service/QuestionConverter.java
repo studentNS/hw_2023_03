@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface QuestionConverter {
 
-    List<Question> getQuestionsFromCVSReader(CSVReader csvReader);
+    List<Question> getQuestionsFromCVS(List<String[]> data);
 }
