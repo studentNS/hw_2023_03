@@ -26,13 +26,11 @@ public class BookServiceImpl implements BookService {
         this.genreService = genreService;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<Book> getBookById(long bookId) {
         return bookDao.getBookById(bookId);
     }
 
-    @Transactional
     @Override
     public Book insert(String bookName, long authorId, long genreId) {
         Optional<Author> author = authorService.getAuthorById(authorId);
@@ -42,7 +40,6 @@ public class BookServiceImpl implements BookService {
         return bookDao.insert(book);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Book> findAllBooks() {
         return bookDao.findAllBooks();

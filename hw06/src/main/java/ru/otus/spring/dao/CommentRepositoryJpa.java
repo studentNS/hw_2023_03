@@ -3,10 +3,8 @@ package ru.otus.spring.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Comment;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,12 +16,6 @@ public class CommentRepositoryJpa implements CommentRepository {
     @Override
     public Optional<Comment> getCommentById(long commentId) {
         return Optional.ofNullable(em.find(Comment.class, commentId));
-    }
-
-    @Override
-    public List<Comment> getCommentByBook(long bookId) {
-        Book book = em.find(Book.class, bookId);
-        return List.copyOf(book.getComments());
     }
 
     @Override

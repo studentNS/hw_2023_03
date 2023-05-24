@@ -40,15 +40,6 @@ public class CommentRepositoryJpaTest {
                 .usingRecursiveComparison().isEqualTo(expectedComment);
     }
 
-    @DisplayName("получать список комметариев по книге")
-    @Test
-    void shouldGetCommentByBookTest() {
-        List<Comment> actualCommentList = commentRepositoryJpa.getCommentByBook(FIRST_BOOK_ID);
-        Book book = em.find(Book.class, FIRST_BOOK_ID);
-        List<Comment> expectedCommentList = book.getComments();
-        assertThat(actualCommentList).usingRecursiveComparison().isEqualTo(expectedCommentList);
-    }
-
     @DisplayName("добавлять комментарий к книге в БД")
     @Test
     void shouldInsertCommentTest() {

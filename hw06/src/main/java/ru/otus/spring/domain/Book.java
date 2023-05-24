@@ -45,8 +45,7 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @OneToMany(targetEntity = Comment.class, cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     @ToString.Exclude
     private List<Comment> comments;

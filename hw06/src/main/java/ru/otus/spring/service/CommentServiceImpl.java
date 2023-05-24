@@ -21,16 +21,15 @@ public class CommentServiceImpl implements CommentService {
         this.bookService = bookService;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<Comment> getCommentById(long commentId) {
         return commentRepository.getCommentById(commentId);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Comment> getCommentByBookId(long bookId) {
-        return commentRepository.getCommentByBook(bookId);
+        Book book = bookService.getBookById(bookId).get();
+        return List.copyOf(book.getComments());
     }
 
     @Transactional
