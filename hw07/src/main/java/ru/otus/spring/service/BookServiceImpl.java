@@ -1,6 +1,7 @@
 package ru.otus.spring.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.dao.BookRepository;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
@@ -30,6 +31,7 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(bookId);
     }
 
+    @Transactional
     @Override
     public Book insert(String bookName, long authorId, long genreId) {
         Optional<Author> author = authorService.getAuthorById(authorId);
