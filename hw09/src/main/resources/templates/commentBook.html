@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Comments</title>
+  <style type="text/css">
+    body {
+      padding: 50px;
+    }
+
+    .books {
+      border: 1px solid steelblue;
+      width: 300px;
+      border-collapse: collapse;
+    }
+
+    .books tr td, th {
+      padding: 5px;
+      border: 1px solid steelblue;
+    }
+
+    .books td:last-child, td:first-child {
+      width: 50px;
+    }
+  </style>
+</head>
+<body>
+<h3>Comments:</h3>
+
+<table class="books">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Text</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="comment : ${comments}">
+    <td th:text="${comment.id}">1</td>
+    <td th:text="${comment.text}">Интересно</td>
+    <td>
+      <form method="post" th:action="@{/comment/delete(commentId=${comment.id})}">
+        <a href="editComment.html" th:href="@{/comment/edit(commentId=${comment.id})}">Edit</a>
+        <button class="btn btn-secondary btn-sm">Delete</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="row">
+  <a href="createComment.html" th:href="@{/comment/create(bookId=${book.id})}"><button type="button">Add new comment</button></a>
+  <a href="listBooks.html" th:href="@{/}"><button type="button">Cancel</button></a>
+</div>
+</body>
+</html>
