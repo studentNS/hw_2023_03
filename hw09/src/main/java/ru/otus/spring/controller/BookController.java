@@ -40,12 +40,7 @@ public class BookController {
     public String editBook(@RequestParam("id") long id, Model model) {
         BookDto book = bookService.getBookDtoById(id).get();
         model.addAttribute("book", book);
-
-        List<AuthorDto> allAuthors = authorService.getAllAuthor();
-        model.addAttribute("authors", allAuthors);
-
-        List<GenreDto> allGenres = genreService.getAllGenre();
-        model.addAttribute("genres", allGenres);
+        fillAuthorsAndGenres(model);
         return "editBook";
     }
 
@@ -59,14 +54,8 @@ public class BookController {
     public String insertBook(Model model) {
         BookDto book = new BookDto();
         model.addAttribute("book", book);
-
-        List<AuthorDto> allAuthors = authorService.getAllAuthor();
-        model.addAttribute("authors", allAuthors);
-
-        List<GenreDto> allGenres = genreService.getAllGenre();
-        model.addAttribute("genres", allGenres);
-
-        return "createBook";
+        fillAuthorsAndGenres(model);
+        return "editBook";
     }
 
     @PostMapping("/create")
@@ -79,5 +68,12 @@ public class BookController {
     public String deleteBook(@RequestParam("id") long bookId) {
         bookService.deleteBookById(bookId);
         return "redirect:/";
+    }
+
+    public void fillAuthorsAndGenres(Model model) {
+        List<AuthorDto> allAuthors = authorService.getAllAuthor();
+        model.addAttribute("authors", allAuthors);
+        List<GenreDto> allGenres = genreService.getAllGenre();
+        model.addAttribute("genres", allGenres);
     }
 }
