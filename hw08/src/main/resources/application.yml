@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: awesomeMongo
+mongock:
+  change-logs-scan-package: ru.otus.spring.changelogs
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
