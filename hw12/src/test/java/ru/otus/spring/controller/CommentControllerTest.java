@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.dto.BookDto;
 import ru.otus.spring.dto.CommentDto;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Контроллер для работы с комментариями книг")
 @WebMvcTest(CommentController.class)
+@WithMockUser(username = "user")
 public class CommentControllerTest {
 
     @Autowired
@@ -82,7 +85,7 @@ public class CommentControllerTest {
     @Test
     public void shouldPostEditCommentBookTest() throws Exception {
         when(commentService.getCommentById(comment.getId())).thenReturn(Optional.of(comment));
-        mvc.perform(post("/comment/edit")
+        mvc.perform(post("/comment/edit").with(csrf())
                 .flashAttr("comment", comment))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())
@@ -105,7 +108,7 @@ public class CommentControllerTest {
     public void shouldPostCreateCommentBookTest() throws Exception {
         when(bookService.getBookDtoById(book.getId())).thenReturn(Optional.of(book));
         CommentDto expectedComment = new CommentDto(0L, "Интересно", book);
-        mvc.perform(post("/comment/create")
+        mvc.perform(post("/comment/create").with(csrf())
                 .queryParam("bookId", Long.toString(book.getId()))
                 .flashAttr("comment", expectedComment.getText()))
                 .andExpect(status().is3xxRedirection())
@@ -118,7 +121,7 @@ public class CommentControllerTest {
     @Test
     public void shoulDeleteCommentBookTest() throws Exception {
         long commentId = comment.getId();
-        mvc.perform(post("/comment/delete")
+        mvc.perform(post("/comment/delete").with(csrf())
                 .queryParam("commentId", Long.toString(commentId)))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())

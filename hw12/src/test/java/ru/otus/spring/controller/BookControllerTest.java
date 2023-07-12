@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.dto.AuthorDto;
 import ru.otus.spring.dto.BookDto;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Контроллер для работы с книгами")
 @WebMvcTest(BookController.class)
+@WithMockUser(username = "user")
 public class BookControllerTest {
 
     @Autowired
@@ -91,7 +94,7 @@ public class BookControllerTest {
     @DisplayName("выполнять редактирование книги")
     @Test
     public void shouldPostEditBookTest() throws Exception {
-        mvc.perform(post("/edit")
+        mvc.perform(post("/edit").with(csrf())
                 .flashAttr("book", book))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())
@@ -105,13 +108,13 @@ public class BookControllerTest {
         mvc.perform(get("/create"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("book"))
-                .andExpect(view().name("createBook"));
+                .andExpect(view().name("editBook"));
     }
 
     @DisplayName("выполнять создание книги")
     @Test
     public void shouldPostCreateBookTest() throws Exception {
-        mvc.perform(post("/create")
+        mvc.perform(post("/create").with(csrf())
                 .flashAttr("bookDto", book))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())
@@ -123,7 +126,7 @@ public class BookControllerTest {
     @Test
     public void shoulDeleteBookTest() throws Exception {
         long bookId = book.getId();
-        mvc.perform(post("/delete")
+        mvc.perform(post("/delete").with(csrf())
                 .queryParam("id", Long.toString(bookId)))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())
