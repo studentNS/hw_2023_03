@@ -1,0 +1,24 @@
+### Список доступных метрик Spring Boot Actuator
+GET http://localhost:8080/actuator
+Accept: application/json
+
+### Доступ к метрики Prometheus
+GET http://localhost:8080/actuator/prometheus
+
+### Доступ к Health (статус up, если книги есть в бд)
+GET http://localhost:8080/actuator/health
+
+### Доступ к Health (отображение только статуса)
+GET http://localhost:8080/actuator/health/books
+
+### Доступ к logfile
+GET http://localhost:8080/actuator/logfile
+
+### Доступ к Hal Explorer
+GET http://localhost:8080/datarest/explorer/index.html#
+
+### Из-за аннотации RestResource на репозитории книг на метод поиска по имени
+GET http://localhost:8080/datarest/books/search
+
+### Пример поиска по наименованию книги
+GET http://localhost:8080/datarest/books/search/name?name=Евгений%20Онегин
