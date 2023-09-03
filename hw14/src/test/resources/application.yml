@@ -1,0 +1,33 @@
+
+spring:
+  batch:
+    job:
+      enabled: false
+  shell:
+    interactive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+  datasource:
+    url: jdbc:h2:mem:testdb
+  data:
+    mongodb:
+      host: localhost
+      port: 0
+      database: awesomeMongoTest
+#      port: 27017
+#      database: mongo-exp-project
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+mongock:
+  change-logs-scan-package: ru.otus.spring.changelogs
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
