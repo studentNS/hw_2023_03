@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .books tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .books td:last-child, td:first-child {
+            width: 50px;
+        }
+    </style>
+
+    <script>
+
+        function getAllBooks() {
+            fetch('/books', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            })
+                .then((response) => {
+                    response.json().then(
+                        books => {
+                            console.log(books);
+                            var new_tbody = document.createElement('tbody');
+                            if (books.length > 0) {
+                                books.forEach((book) => {
+                                    var row = new_tbody.insertRow();
+                                    cell0 = row.insertCell(0);
+                                    cell0.innerHTML = book.id;
+                                    cell1 = row.insertCell(1);
+                                    cell1.innerHTML = book.name;
+                                    cell2 = row.insertCell(2);
+                                    cell2.innerHTML = book.author.id;
+                                    cell3 = row.insertCell(3);
+                                    cell3.innerHTML = book.author.name;
+                                    cell4 = row.insertCell(4);
+                                    cell4.innerHTML = book.genre.id;
+                                    cell5 = row.insertCell(5);
+                                    cell5.innerHTML = book.genre.name;
+
+                                    cell6 = row.insertCell(6);
+                                    cell6.innerHTML = `<button id="btn-edit-book">Edit</button>`;
+                                    cell7 = row.insertCell(7);
+                                    cell7.innerHTML = `<button id="btn-delete-book">Delete</button>`;
+                                    cell8 = row.insertCell(8);
+                                    cell8.innerHTML = `<a href="/comment/${book.id}"><button type="button">Comments</button></a>`;
+                                });
+                            }
+                            var old_tbody = document.getElementById('tab-books-data').getElementsByTagName('tbody')[0];
+                            old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+
+                            document.querySelectorAll('[id=btn-edit-book]').forEach((btn) => {
+                                btn.addEventListener('click', function () {
+                                    bookPrepareEdit(this);
+                                });
+                            });
+                            document.querySelectorAll('[id=btn-delete-book]').forEach((btn) => {
+                                btn.addEventListener('click', function () {
+                                    deleteBook(this);
+                                });
+                            });
+                        });
+                })
+        }
+
+        function bookFormSubmit() {
+            bookName = document.getElementById('book-name-input').value;
+            authorId = Number(document.getElementById("book-author-select").querySelector("option:checked").value);
+            genreId = Number(document.getElementById("book-genre-select").querySelector("option:checked").value);
+            book = {
+                name: bookName,
+                author: {
+                    id: authorId
+                },
+                genre: {
+                    id: genreId
+                }
+            };
+            console.log(JSON.stringify(book));
+            bookIdStr = document.getElementById('book-id-input').value;
+            if (!bookIdStr) {
+                createBook(book)
+                    .then((response) => resetBookForm())
+                    .then((response) => getAllBooks());
+            } else {
+                book["id"] = Number(bookIdStr);
+                updateBook(book)
+                    .then((response) => resetBookForm())
+                    .then((response) => getAllBooks());
+            }
+        }
+
+        function deleteBook(btn) {
+            row = btn.parentElement.parentElement;
+            id = row.cells[0].innerHTML;
+            fetch('/book/delete/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            })
+                .then(() => row.remove());
+        }
+
+        function updateBook(book) {
+            fetch('/book/edit/' + book.id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(book)
+            })
+        }
+
+        function createBook(book) {
+            fetch('/book/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(book)
+            });
+        }
+
+        function bookPrepareEdit(btn) {
+            row = btn.parentElement.parentElement;
+            document.getElementById("book-id-input").value = row.cells[0].innerHTML;
+            document.getElementById("book-name-input").value = row.cells[1].innerHTML;
+            document.getElementById("book-author-select").value = row.cells[2].innerHTML;
+            document.getElementById("book-genre-select").value = row.cells[4].innerHTML;
+        }
+
+        function resetBookForm() {
+            document.getElementById("book-id-input").value = "";
+            document.getElementById("book-name-input").value = "";
+            document.getElementById("book-author-select").value = "";
+            document.getElementById("book-genre-select").value = "";
+        }
+
+    </script>
+
+</head>
+
+<h3>Books:</h3>
+<body onload="getAllBooks()">
+<table class="books" id="tab-books-data">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Author ID</th>
+        <th>Author</th>
+        <th>Genre ID</th>
+        <th>Genre</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<form id="edit-form">
+    <h3>Create/edit book:</h3>
+    <div class="row">
+        <label for="book-id-input">ID:</label>
+        <input id="book-id-input" type="text" name="book-id-input" readonly="readonly"/>
+    </div>
+
+    <div class="row">
+        <label for="book-name-input">Name:</label>
+        <input class="form-control" id="book-name-input" name="name" type="text" value=""/>
+    </div>
+
+    <div class="row">
+        <label for="book-author-select">Author:</label>
+        <select class="form-control" id="book-author-select" name="book-author-select">
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.name}">
+            </option>
+        </select>
+    </div>
+
+    <div class="row">
+        <label for="book-genre-select">Genres:</label>
+        <select class="form-control" id="book-genre-select" name="book-genre-select">
+            <option th:each="genre: ${genres}"
+                    th:value="${genre.id}"
+                    th:text="${genre.name}">
+            </option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button id="btn-save-book-form" onclick="bookFormSubmit()">Save</button>
+    </div>
+</form>
+
+</body>
+</html>
