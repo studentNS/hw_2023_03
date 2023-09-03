@@ -1,0 +1,27 @@
+### Список доступных метрик Spring Boot Actuator
+GET http://localhost:8082/actuator
+Accept: application/json
+
+### Доступ к метрики Prometheus
+GET http://localhost:8082/actuator/prometheus
+
+### Доступ к Health (статус up, если книги есть в бд)
+GET http://localhost:8082/actuator/health
+
+### Доступ к Health (отображение только статуса)
+GET http://localhost:8082/actuator/health/books
+
+### Доступ к logfile
+GET http://localhost:8082/actuator/logfile
+
+### Доступ к Hal Explorer
+GET http://localhost:8082/datarest/explorer/index.html#
+
+### Из-за аннотации RestResource на репозитории книг на метод поиска по имени
+GET http://localhost:8082/datarest/books/search
+
+### Пример поиска по наименованию книги
+GET http://localhost:8082/datarest/books/search/name?name=Евгений%20Онегин
+
+### Статистика по circuitbreakers
+GET http://localhost:8082/actuator/circuitbreakers
