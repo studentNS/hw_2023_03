@@ -1,0 +1,10 @@
+kind: Kustomization
+resources:
+  - db/deployment.yaml
+  - db/service.yaml
+  - discovery/deployment.yaml
+  - discovery/service.yaml
+  - library/deployment.yaml
+  - library/service.yaml
+  - client/deployment.yaml
+  - client/service.yaml

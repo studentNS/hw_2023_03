@@ -1,0 +1,63 @@
+server:
+  port: 8082
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+
+spring:
+  application:
+    name: docker-service-book-library
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  data:
+    rest:
+      base-path: /datarest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+    circuitbreakers.enabled: true
+
+logging:
+  pattern:
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    root: info
+  file:
+    name: hw18/logfile.log
+  logback:
+    rollingpolicy:
+      clean-history-on-start: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      register-health-indicator: true
+      sliding-window-size: 10
+      minimum-number-of-calls: 3
+      slow-call-duration-threshold: 200
+      failure-rate-threshold: 50 # порог частоты отказов %
+      ignore-exceptions:
+        - java.lang.RuntimeException

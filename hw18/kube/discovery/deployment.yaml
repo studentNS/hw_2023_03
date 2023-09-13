@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-service-discovery-server-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-service-discovery-server
+  template:
+    metadata:
+      labels:
+        app: docker-service-discovery-server
+    spec:
+      containers:
+        - image: app-discovery
+          name: app-discovery
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8761
+              name: "discovery"

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-service-book-library-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-service-book-library
+  template:
+    metadata:
+      labels:
+        app: docker-service-book-library
+    spec:
+      containers:
+        - image: app-library
+          name: app-library
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8082
+              name: "library"
+          env:
+            - name: eureka.client.service-url.defaultZone
+              value: http://docker-service-discovery-server:8761/eureka
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://$(POSTGRES_SERVICE_HOST)/db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: postgres
+            - name: eureka.instance.hostname
+              value: docker-service-book-library

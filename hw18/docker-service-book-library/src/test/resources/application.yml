@@ -1,0 +1,10 @@
+spring:
+  sql:
+    init:
+      mode: always
+      data-locations: data.sql
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
