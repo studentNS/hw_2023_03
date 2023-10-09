@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-service-book-library-test-client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-service-book-library-test-client
+  template:
+    metadata:
+      labels:
+        app: docker-service-book-library-test-client
+    spec:
+      containers:
+        - image: app-client
+          name: app-client
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8083
+              name: "client"
+          env:
+            - name: eureka.client.service-url.defaultZone
+              value: http://docker-service-discovery-server:8761/eureka

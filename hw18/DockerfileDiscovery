@@ -1,0 +1,22 @@
+FROM maven:3.6.3-openjdk-17-slim as build
+
+ENV PROJECT_DIR=/opt/project-discovery
+
+RUN mkdir -p $PROJECT_DIR
+WORKDIR $PROJECT_DIR
+
+ADD /docker-service-discovery-server/pom.xml $PROJECT_DIR
+RUN mvn dependency:resolve
+
+ADD /docker-service-discovery-server/src/ $PROJECT_DIR/src
+RUN mvn -B clean install
+
+FROM openjdk:17-jdk-slim
+COPY --from=build /opt/project-discovery/target/docker-service-discovery-server.jar /opt/project-discovery/app-discovery.jar
+EXPOSE 8761
+ENTRYPOINT ["java", "-jar", "/opt/project-discovery/app-discovery.jar"]
+
+#FROM openjdk:17-jdk-slim
+#COPY /docker-service-discovery-server/target/docker-service-discovery-server.jar /app/app-discovery.jar
+#EXPOSE 8761
+#ENTRYPOINT ["java", "-jar", "/app/app-discovery.jar"]

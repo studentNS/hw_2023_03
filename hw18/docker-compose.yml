@@ -1,0 +1,63 @@
+version: '3'
+services:
+  postgres:
+    image: "postgres:13"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db
+    networks:
+      - app_network
+  app-discovery:
+    build:
+      context: .
+      dockerfile: DockerfileDiscovery
+    ports:
+      - "8761:8761"
+    networks:
+      - app_network
+    container_name: "app-discovery"
+    image: 'app-discovery'
+    # Эти свойства перегружают соответствующие в application.yml
+    environment:
+      - eureka.client.service-url.defaultZone=http://app-discovery:8761/eureka
+  app-library:
+    build:
+      context: .
+      dockerfile: DockerfileLibrary
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - app-discovery
+    networks:
+      - app_network
+    container_name: "app-library"
+    image: 'app-library'
+    # Эти свойства перегружают соответствующие в application.yml
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - eureka.client.service-url.defaultZone=http://app-discovery:8761/eureka
+  app-client:
+    build:
+      context: .
+      dockerfile: DockerfileClient
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+      - app-discovery
+      - app-library
+    networks:
+      - app_network
+    container_name: "app-client"
+    image: 'app-client'
+    environment:
+      - eureka.client.service-url.defaultZone=http://app-discovery:8761/eureka
+networks:
+  app_network:
+
